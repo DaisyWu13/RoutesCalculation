@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package route;
 
 import graph.model.Graph;
@@ -23,7 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 /**
  *
- * @author Administrator
+ * @author Daisy Wu
  */
 public class RouteOfString {
 
