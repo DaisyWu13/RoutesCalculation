@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package route.action;
+package route;
 
-import route.graph.model.Graph;
-import route.graph.model.Vertex;
-import route.graph.model.Edge;
+import graph.model.Graph;
+import graph.model.Vertex;
+import graph.model.Edge;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +25,7 @@ import org.apache.commons.collections.CollectionUtils;
  *
  * @author Administrator
  */
-public class Action {
+public class RouteOfString {
 
     private Graph<String> graph;
 
@@ -37,11 +37,11 @@ public class Action {
         this.graph = graph;
     }
 
-    private int max = 65535;
+    private static final int MAX = Integer.MAX_VALUE;
 
-    public Action(List<String> list) {
-        initGraph(list);
-        initEdges();
+    public RouteOfString(List<String> list) {
+        this.graph = CreateGraph(list);
+        Graph.initEdges(this.graph);
     }
 
     /**
@@ -53,7 +53,7 @@ public class Action {
     private Vector<Edge<String>> readEdge(List<String> list) {
         Vector<Edge<String>> edgeList = null;
         if (CollectionUtils.isNotEmpty(list)) {
-            edgeList = new Vector<Edge<String>>();         
+            edgeList = new Vector<Edge<String>>();
             for (String subStr : list) {
                 subStr = subStr.trim();
                 if (subStr != null) {
@@ -106,43 +106,22 @@ public class Action {
      *
      * @param list
      */
-    public void initGraph(List<String> list) {
-        graph = new Graph<String>();
+    public Graph CreateGraph(List<String> list) {
+        Graph graph = new Graph<String>();
         graph.setEdgeList(readEdge(list));
         graph.setvList(getVertexTreeset(graph.getEdgeList()));
         int vNum = graph.getvList().size();
         graph.setvNum(vNum);
         graph.setEdgeNum(graph.getEdgeList().size());
-        float[][] edges = new float[vNum][vNum];
+        double[][] edges = new double[vNum][vNum];
         for (int i = 0; i < vNum; i++) {
             for (int j = 0; j < vNum; j++) {
-                edges[i][j] = max;
+                edges[i][j] = MAX;
             }
         }
         graph.setEdges(edges);
+        return graph;
     }
-
-    /**
-     * set the edges[][] according to the edge list and vertex list
-     */
-    public void initEdges() {
-        Vector<Edge<String>> edgeList = graph.getEdgeList();
-        Vector<String> vList = graph.getvList();
-        float[][] edges = graph.getEdges();
-        for (Edge e : edgeList) {
-            Vertex vertStart = e.getVertStart();
-            Vertex vertEnd = e.getVertEnd();
-            int len = vList.size();
-            int start = -1, end = -1;
-            start = vList.indexOf(vertStart.getValue());
-            end = vList.indexOf(vertEnd.getValue());
-            if (start != -1 && end != -1) {
-                edges[start][end] = e.getDistance();
-            }
-
-        }
-    }
-
 
 
 }

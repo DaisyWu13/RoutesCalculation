@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package route.graph.model;
+package graph.model;
 
 /**
  *
@@ -13,7 +13,7 @@ public class Edge<V> {
 
     private Vertex<V> vertStart;//start point
     private Vertex<V> vertEnd;//end point
-    private float distance;
+    private double distance;
 
     public Vertex<V> getVertStart() {
         return vertStart;
@@ -31,15 +31,11 @@ public class Edge<V> {
         this.vertEnd = vertEnd;
     }
 
-    
-
-   
-
-    public float getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(float distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
