@@ -35,9 +35,9 @@ Here is the demo, containing 10 outputs for the shortest distance and how many t
 The graph pakage is composed of the route algorithm and the graph model, the value in the vertex could be anything.
 
 e.g.
-、
-List<String> list = readEdgeFromTxt(txtPath);
-Route route = new RouteOfString(list);
-double d = GraphAlgorithm.computeDistance(this.route.getGraph(), indexs);
-、
+
+    List<String> list = readEdgeFromTxt(txtPath);
+    Route route = new RouteOfString(list);
+    double d = GraphAlgorithm.computeDistance(this.route.getGraph(), indexs);
+
 
