@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.route.model;
+package route.model;
 
 /**
  *
@@ -11,25 +11,29 @@ package com.route.model;
  */
 public class Edge<V> {
 
-    private Vertex<V> v_s;//起点
-    private Vertex<V> v_e;//终点
-    private float distance;//距离
+    private Vertex<V> vertStart;//start point
+    private Vertex<V> vertEnd;//end point
+    private float distance;
 
-    public Vertex<V> getV_s() {
-        return v_s;
+    public Vertex<V> getVertStart() {
+        return vertStart;
     }
 
-    public void setV_s(Vertex<V> v_s) {
-        this.v_s = v_s;
+    public void setVertStart(Vertex<V> vertStart) {
+        this.vertStart = vertStart;
     }
 
-    public Vertex<V> getV_e() {
-        return v_e;
+    public Vertex<V> getVertEnd() {
+        return vertEnd;
     }
 
-    public void setV_e(Vertex<V> v_e) {
-        this.v_e = v_e;
+    public void setVertEnd(Vertex<V> vertEnd) {
+        this.vertEnd = vertEnd;
     }
+
+    
+
+   
 
     public float getDistance() {
         return distance;
@@ -41,7 +45,7 @@ public class Edge<V> {
 
     public int compare(Edge<V> e) {
         int flag;
-        if (this.v_s.getValue().equals(e.getV_s().getValue()) && this.v_e.getValue().equals(e.getV_e().getValue())) {
+        if (this.vertStart.getValue().equals(e.getVertStart().getValue()) && this.vertEnd.getValue().equals(e.getVertEnd().getValue())) {
             flag = 0;
         } else {
             flag = 1;

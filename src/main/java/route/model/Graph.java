@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.route.model;
+package route.model;
 
 import java.util.Vector;
 
@@ -14,17 +14,17 @@ import java.util.Vector;
 public class Graph<V> {
 
     private Vector<Edge<V>> edgeList;//store all the edges
-    private Vector<String> v_list;//store the key value of vertex
+    private Vector<String> vList;//store the key value of vertex
     private float[][] edges;//store the distance between vertex
-    private int v_num;//the number of vertexes
-    private int edge_num;//the number of edges
+    private int vNum;//the number of vertexes
+    private int edgeNum;//the number of edges
 
-    public int getEdge_num() {
-        return edge_num;
+    public int getEdgeNum() {
+        return edgeNum;
     }
 
-    public void setEdge_num(int edge_num) {
-        this.edge_num = edge_num;
+    public void setEdgeNum(int edgeNum) {
+        this.edgeNum = edgeNum;
     }
 
     public Vector<Edge<V>> getEdgeList() {
@@ -43,25 +43,25 @@ public class Graph<V> {
         this.edges = edges;
     }
 
-    public int getV_num() {
-        return v_num;
+    public int getvNum() {
+        return vNum;
     }
 
-    public void setV_num(int v_num) {
-        this.v_num = v_num;
+    public void setvNum(int vNum) {
+        this.vNum = vNum;
     }
 
-    public Vector<String> getV_list() {
-        return v_list;
+    public Vector<String> getvList() {
+        return vList;
     }
 
-    public void setV_list(Vector<String> v_list) {
-        this.v_list = v_list;
+    public void setvList(Vector<String> vList) {
+        this.vList = vList;
     }
 
     public Graph(int size) {
         this.edges = new float[size][size];
-        this.v_num = size;
+        this.vNum = size;
     }
 
     public Graph() {

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.route.test;
+package route.test;
 
-import com.routes.caculation.Output;
+import route.caculation.Output;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;

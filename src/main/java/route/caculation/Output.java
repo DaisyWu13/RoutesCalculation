@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.routes.caculation;
+package route.caculation;
 
+import route.action.Action;
 import java.util.Vector;
-import com.route.action.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,10 +56,10 @@ public class Output {
                     try {
                         while ((line = br.readLine()) != null) {
                             String[] s = line.split(",");
-                            for (String sub_s : s) {
-                                sub_s = sub_s.trim();
-                                if (sub_s != null) {
-                                    edgeList.add(sub_s);
+                            for (String str : s) {
+                                str = str.trim();
+                                if (str != null) {
+                                    edgeList.add(str);
                                 }
                             }
                         }
@@ -85,11 +85,11 @@ public class Output {
     public float output1() {
         float distance = 0;
         if(this.action != null){
-            Vector<String> v_list = action.getGraph().getV_list();
-            int index_A = v_list.indexOf("A");
-            int index_B = v_list.indexOf("B");
-            int index_C = v_list.indexOf("C");
-            int[] indexs = new int[]{index_A, index_B, index_C};
+            Vector<String> vList = action.getGraph().getvList();
+            int indexA = vList.indexOf("A");
+            int indexB = vList.indexOf("B");
+            int indexC = vList.indexOf("C");
+            int[] indexs = new int[]{indexA, indexB, indexC};
             distance = action.computeDistance(indexs);
             
         }
@@ -100,10 +100,10 @@ public class Output {
     public float output2() {
          float distance = 0;
         if(this.action != null){
-            Vector<String> v_list = action.getGraph().getV_list();
-            int index_A = v_list.indexOf("A");
-            int index_D = v_list.indexOf("D");           
-            int[] indexs = new int[]{index_A, index_D};
+            Vector<String> vList = action.getGraph().getvList();
+            int indexA = vList.indexOf("A");
+            int indexD = vList.indexOf("D");           
+            int[] indexs = new int[]{indexA, indexD};
             distance = action.computeDistance(indexs);
            
         }
@@ -115,11 +115,11 @@ public class Output {
     public float output3() {
          float distance = 0;
         if(this.action != null){
-            Vector<String> v_list = action.getGraph().getV_list();
-            int index_A = v_list.indexOf("A");
-            int index_D = v_list.indexOf("D");
-            int index_C = v_list.indexOf("C");           
-            int[] indexs = new int[]{index_A, index_D, index_C};
+            Vector<String> vList = action.getGraph().getvList();
+            int indexA = vList.indexOf("A");
+            int indexD = vList.indexOf("D");
+            int indexC = vList.indexOf("C");           
+            int[] indexs = new int[]{indexA, indexD, indexC};
             distance = action.computeDistance(indexs);
            
         }
@@ -130,13 +130,13 @@ public class Output {
     public float output4() {
         float distance = 0;
         if(this.action != null){
-            Vector<String> v_list = action.getGraph().getV_list();
-            int index_A = v_list.indexOf("A");
-            int index_E = v_list.indexOf("E");
-            int index_B = v_list.indexOf("B");
-            int index_C = v_list.indexOf("C");
-            int index_D = v_list.indexOf("D");            
-            int[] indexs = new int[]{index_A, index_E, index_B, index_C, index_D};
+            Vector<String> vList = action.getGraph().getvList();
+            int indexA = vList.indexOf("A");
+            int indexE = vList.indexOf("E");
+            int indexB = vList.indexOf("B");
+            int indexC = vList.indexOf("C");
+            int indexD = vList.indexOf("D");            
+            int[] indexs = new int[]{indexA, indexE, indexB, indexC, indexD};
             distance = action.computeDistance(indexs);
            
         }
@@ -147,11 +147,11 @@ public class Output {
     public float output5() {
         float distance = 0;
         if(this.action != null){
-            Vector<String> v_list = action.getGraph().getV_list();
-            int index_A = v_list.indexOf("A");
-            int index_E = v_list.indexOf("E");
-            int index_D = v_list.indexOf("D");            
-            int[] indexs = new int[]{index_A, index_E, index_D};
+            Vector<String> vList = action.getGraph().getvList();
+            int indexA = vList.indexOf("A");
+            int indexE = vList.indexOf("E");
+            int indexD = vList.indexOf("D");            
+            int[] indexs = new int[]{indexA, indexE, indexD};
             distance = action.computeDistance(indexs);
             
         }

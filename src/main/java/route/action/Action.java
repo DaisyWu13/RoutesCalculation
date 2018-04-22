@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.route.action;
+package route.action;
 
-import com.route.model.*;
+import route.model.Graph;
+import route.model.Vertex;
+import route.model.Edge;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,16 +54,16 @@ public class Action {
         Vector<Edge<String>> edgeList = null;
         if (CollectionUtils.isNotEmpty(list)) {
             edgeList = new Vector<Edge<String>>();         
-            for (String sub_s : list) {
-                sub_s = sub_s.trim();
-                if (sub_s != null) {
+            for (String subStr : list) {
+                subStr = subStr.trim();
+                if (subStr != null) {
                     Edge<String> edge = new Edge<String>();
-                    int len = sub_s.length();
-                    Vertex<String> v_s = new Vertex<String>(sub_s.substring(len - 3, len - 2));
-                    Vertex<String> v_e = new Vertex<String>(sub_s.substring(len - 2, len - 1));
-                    edge.setV_s(v_s);
-                    edge.setV_e(v_e);
-                    edge.setDistance(Integer.valueOf(sub_s.substring(len - 1)));
+                    int len = subStr.length();
+                    Vertex<String> vertStart = new Vertex<String>(subStr.substring(len - 3, len - 2));
+                    Vertex<String> vertEnd = new Vertex<String>(subStr.substring(len - 2, len - 1));
+                    edge.setVertStart(vertStart);
+                    edge.setVertEnd(vertEnd);
+                    edge.setDistance(Integer.valueOf(subStr.substring(len - 1)));
                     edgeList.addElement(edge);
                 }
             }
@@ -81,21 +83,21 @@ public class Action {
         TreeSet<Vertex<String>> set = new TreeSet<Vertex<String>>();
 
         for (Edge<String> e : list) {
-            Vertex<String> v_s = e.getV_s();
-            set.add((Vertex<String>) v_s);
-            Vertex<String> v_e = e.getV_e();
-            set.add((Vertex<String>) v_e);
+            Vertex<String> vertStart = e.getVertStart();
+            set.add((Vertex<String>) vertStart);
+            Vertex<String> vertEnd = e.getVertEnd();
+            set.add((Vertex<String>) vertEnd);
         }
         //set the index in sequence for vertex
-        Vector<String> v_list = new Vector<String>();
+        Vector<String> vList = new Vector<String>();
         int i = 0;
         for (Vertex<String> v : set) {
             v.setIndex(i);
-            v_list.add(v.getValue());
+            vList.add(v.getValue());
             i++;
         }
 
-        return v_list;
+        return vList;
     }
 
     /**
@@ -107,13 +109,13 @@ public class Action {
     public void initGraph(List<String> list) {
         graph = new Graph<String>();
         graph.setEdgeList(readEdge(list));
-        graph.setV_list(getVertexTreeset(graph.getEdgeList()));
-        int v_num = graph.getV_list().size();
-        graph.setV_num(v_num);
-        graph.setEdge_num(graph.getEdgeList().size());
-        float[][] edges = new float[v_num][v_num];
-        for (int i = 0; i < v_num; i++) {
-            for (int j = 0; j < v_num; j++) {
+        graph.setvList(getVertexTreeset(graph.getEdgeList()));
+        int vNum = graph.getvList().size();
+        graph.setvNum(vNum);
+        graph.setEdgeNum(graph.getEdgeList().size());
+        float[][] edges = new float[vNum][vNum];
+        for (int i = 0; i < vNum; i++) {
+            for (int j = 0; j < vNum; j++) {
                 edges[i][j] = max;
             }
         }
@@ -124,16 +126,16 @@ public class Action {
      * set the edges[][] according to the edge list and vertex list
      */
     public void initEdges() {
-        Vector<Edge<String>> edge_list = graph.getEdgeList();
-        Vector<String> v_list = graph.getV_list();
+        Vector<Edge<String>> edgeList = graph.getEdgeList();
+        Vector<String> vList = graph.getvList();
         float[][] edges = graph.getEdges();
-        for (Edge e : edge_list) {
-            Vertex v_s = e.getV_s();
-            Vertex v_e = e.getV_e();
-            int len = v_list.size();
+        for (Edge e : edgeList) {
+            Vertex vertStart = e.getVertStart();
+            Vertex vertEnd = e.getVertEnd();
+            int len = vList.size();
             int start = -1, end = -1;
-            start = v_list.indexOf(v_s.getValue());
-            end = v_list.indexOf(v_e.getValue());
+            start = vList.indexOf(vertStart.getValue());
+            end = vList.indexOf(vertEnd.getValue());
             if (start != -1 && end != -1) {
                 edges[start][end] = e.getDistance();
             }
@@ -150,18 +152,18 @@ public class Action {
     public float computeDistance(int[] indexs) {
         float[][] edges = graph.getEdges();
         float distance = 0;
-        boolean not_exist = false;
+        boolean notExist = false;
         for (int i = 0; i < indexs.length - 1; i++) {
             if (indexs[i] != -1 && indexs[i + 1] != -1) {
                 if (edges[indexs[i]][indexs[i + 1]] != max) {
                     distance += edges[indexs[i]][indexs[i + 1]];
                 } else {
-                    not_exist = true;
+                    notExist = true;
                 }
             }
 
         }
-        if (not_exist) {
+        if (notExist) {
             return -1;
         } else {
             return distance;
@@ -175,11 +177,11 @@ public class Action {
      * @param vertex2
      */
     public float shortestRoute(String vertex1, String vertex2) {
-        Vector<String> v_list = graph.getV_list();
-        int index1 = v_list.indexOf(vertex1);
-        int index2 = v_list.indexOf(vertex2);
+        Vector<String> vList = graph.getvList();
+        int index1 = vList.indexOf(vertex1);
+        int index2 = vList.indexOf(vertex2);
         if (index1 != -1 && index2 != -1) {
-            int N = graph.getV_num();
+            final int N = graph.getvNum();
             float[][] edges = graph.getEdges();
 
             //init
@@ -197,23 +199,23 @@ public class Action {
             //compute the shortest route, starting at original vertex to any vertex k, then add k to set
             for (int i = 1; i <= N; i++) {
                 float min = max;
-                int min_index = 0;//the minimum vertex
+                int minIndex = 0;//the minimum vertex
                 for (int k = 0; k < N; k++) {
                     if (set[k] == 0 && d[k] < min) {
                         min = d[k];
-                        min_index = k;
+                        minIndex = k;
                     }
                 }
 
-                set[min_index] = 1;//added into set
+                set[minIndex] = 1;//added into set
                 //if the current vertex is the destination, then break, else modify the distance to other unprocessed vertex
-                if (min_index == index2) {
+                if (minIndex == index2) {
                     break;
                 } else {
                     for (int k = 0; k < N; k++) {
-                        if (set[k] == 0 && (d[min_index] + edges[min_index][k] < d[k])) {
-                            d[k] = d[min_index] + edges[min_index][k];
-                            parent[k] = min_index;
+                        if (set[k] == 0 && (d[minIndex] + edges[minIndex][k] < d[k])) {
+                            d[k] = d[minIndex] + edges[minIndex][k];
+                            parent[k] = minIndex;
                         }
                     }
                 }
@@ -242,43 +244,43 @@ public class Action {
      */
     public int routeNum(String srcVertex, String destVertex, int level, boolean total) {
         int num = 0;
-        int N = graph.getV_num();
-        Vector<String> v_list = graph.getV_list();
+        int N = graph.getvNum();
+        Vector<String> vList = graph.getvList();
         float[][] edges = graph.getEdges();
-        int src_index = v_list.indexOf(srcVertex);
-        int dest_index = v_list.indexOf(destVertex);
+        int srcIndex = vList.indexOf(srcVertex);
+        int destIndex = vList.indexOf(destVertex);
         LinkedList<Integer> queue = new LinkedList<Integer>();
-        if (src_index != -1 && dest_index != -1) {
-            queue.add(src_index);
+        if (srcIndex != -1 && destIndex != -1) {
+            queue.add(srcIndex);
             for (int i = 1; i <= level; i++)//start at 1 stops
             {
                 if (total) {
                     for (int row : queue) {
-                        if (edges[row][dest_index] != max) {
+                        if (edges[row][destIndex] != max) {
                             num++;
                         }
                     }
                 }
                 if (!total && i == level) {
                     for (int row : queue) {
-                        if (edges[row][dest_index] != max) {
+                        if (edges[row][destIndex] != max) {
                             num++;
                         }
                     }
                 }
                 if (i != level) {
-                    LinkedList<Integer> queue_level = new LinkedList<Integer>();
+                    LinkedList<Integer> queueLevel = new LinkedList<Integer>();
                     for (int row : queue) {
                         for (int column = 0; column < N; column++) {
                             if (edges[row][column] != max) {
-                                queue_level.addFirst(column);
+                                queueLevel.addFirst(column);
                             }
                         }
                     }
 
                     queue.clear();
-                    queue = queue_level;
-                    queue_level = null;
+                    queue = queueLevel;
+                    queueLevel = null;
 
                 }
 
@@ -303,37 +305,37 @@ public class Action {
      */
     public int routeNumLimitedByDistance(String srcVertex, String destVertex, float distance) {
         int num = 0;
-        int N = graph.getV_num();
-        Vector<String> v_list = graph.getV_list();
+        int N = graph.getvNum();
+        Vector<String> vList = graph.getvList();
         float[][] edges = graph.getEdges();
-        int src_index = v_list.indexOf(srcVertex);
-        int dest_index = v_list.indexOf(destVertex);
+        int srcIndex = vList.indexOf(srcVertex);
+        int destIndex = vList.indexOf(destVertex);
         LinkedList<Node> queue = null;
         if (distance > max) {
             return -1;
         }
-        if (src_index != -1 && dest_index != -1) {
+        if (srcIndex != -1 && destIndex != -1) {
             queue = new LinkedList<Node>();
-            queue.addFirst(new Node(src_index, 0));
+            queue.addFirst(new Node(srcIndex, 0));
             for (int i = 1;; i++) {
                 for (Node node : queue) {
-                    if ((node.getDistance() + edges[node.getIndex()][dest_index]) < distance) {
+                    if ((node.getDistance() + edges[node.getIndex()][destIndex]) < distance) {
                         num++;
 //							System.out.println(node.getIndex()+":"+node.getDistance());
                     }
                 }
-                LinkedList<Node> queue_level = new LinkedList<Node>();
+                LinkedList<Node> queueLevel = new LinkedList<Node>();
                 for (Node node : queue) {
                     for (int column = 0; column < N; column++) {
                         if ((node.getDistance() + edges[node.getIndex()][column]) < distance) {
-                            queue_level.addFirst(new Node(column, node.getDistance() + edges[node.getIndex()][column]));
+                            queueLevel.addFirst(new Node(column, node.getDistance() + edges[node.getIndex()][column]));
                         }
                     }
                 }
 
                 queue.clear();
-                queue = queue_level;
-                queue_level = null;
+                queue = queueLevel;
+                queueLevel = null;
                 if (queue.size() <= 0) {
                     break;
                 }
