@@ -14,13 +14,14 @@ and the distance between vertex, the row and colum index maps to index of vertex
 It offers two kinds of algorithms, one is to compute the shortest distance between two points, another is to compute the numbers of routes between points.
 
 - dijkstra
-![djkstra diagram](\img-resrc\dijkstra.png)
+![djkstra diagram](img-resrc\dijkstra.png)
 
 - routesNum
-![routesNum diagram](\img-resrc\routes-num.png)
+![routesNum diagram](img-resrc\routes-num.png)
 
 - routesNumLimit
-![routesNumLimit diagram](\img-resrc\routes-num-limit.png)
+![routesNumLimit diagram](img-resrc\routes-num-limit.png)
+
 
 5. RouteOfString
 This class mainly describes a route, which has a graph in. The mainly works here is to init a graph describing train routes.
