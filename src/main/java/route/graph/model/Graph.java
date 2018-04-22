@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package route.model;
+package route.graph.model;
 
+import route.graph.model.Edge;
 import java.util.Vector;
 
 /**

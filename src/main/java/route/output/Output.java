@@ -19,6 +19,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import route.graph.algorithm.RouteAlgorithm;
 
 /**
  *
@@ -38,13 +39,17 @@ public class Output {
     }
 
     public Output(String txtPath) {
-        List<String> list = readEdgeFromTxt(txtPath);
-        if (CollectionUtils.isNotEmpty(list)) {
-            action = new Action(list);
+        try{
+            List<String> list = readEdgeFromTxt(txtPath);
+            if (CollectionUtils.isNotEmpty(list)) {
+                action = new Action(list);
+            }
+        }catch(Exception e){
+            logger.error("construct error",e);
         }
     }
 
-    private List<String> readEdgeFromTxt(String txtPath) {
+    private List<String> readEdgeFromTxt(String txtPath) throws Exception {
         List<String> edgeList = null;
         if (txtPath != null) {            
             File file = new File(txtPath);
@@ -53,7 +58,7 @@ public class Output {
                 try {
                     BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));
                     String line = null;
-                    try {
+                    
                         while ((line = br.readLine()) != null) {
                             String[] s = line.split(",");
                             for (String str : s) {
@@ -63,16 +68,10 @@ public class Output {
                                 }
                             }
                         }
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        logger.error("IOException", e);
-                    }
-                } catch (FileNotFoundException e) {
+                   
+                } catch (Exception e) {
                     // TODO Auto-generated catch block
-                    logger.error("FileNotFoundException", e);
-                } catch (UnsupportedEncodingException e1) {
-                    // TODO Auto-generated catch block
-                    logger.error("UnsupportedEncodingException", e1);
+                    throw e;
                 }
             } else {
                 logger.info("file does not exist: " + txtPath);
@@ -84,13 +83,13 @@ public class Output {
     //The distance of the route A-B-C.
     public float output1() {
         float distance = 0;
-        if(this.action != null){
+        if(this.action != null && this.action.getGraph() != null){
             Vector<String> vList = action.getGraph().getvList();
             int indexA = vList.indexOf("A");
             int indexB = vList.indexOf("B");
             int indexC = vList.indexOf("C");
             int[] indexs = new int[]{indexA, indexB, indexC};
-            distance = action.computeDistance(indexs);
+            distance = RouteAlgorithm.computeDistance(this.action.getGraph(),indexs);
             
         }
         return distance;
@@ -99,12 +98,12 @@ public class Output {
     //The distance of the route A-D.
     public float output2() {
          float distance = 0;
-        if(this.action != null){
+        if(this.action != null && this.action.getGraph() != null){
             Vector<String> vList = action.getGraph().getvList();
             int indexA = vList.indexOf("A");
             int indexD = vList.indexOf("D");           
             int[] indexs = new int[]{indexA, indexD};
-            distance = action.computeDistance(indexs);
+            distance = RouteAlgorithm.computeDistance(this.action.getGraph(),indexs);
            
         }
         return distance;
@@ -114,13 +113,13 @@ public class Output {
     //The distance of the route A-D-C.
     public float output3() {
          float distance = 0;
-        if(this.action != null){
+        if(this.action != null && this.action.getGraph() != null){
             Vector<String> vList = action.getGraph().getvList();
             int indexA = vList.indexOf("A");
             int indexD = vList.indexOf("D");
             int indexC = vList.indexOf("C");           
             int[] indexs = new int[]{indexA, indexD, indexC};
-            distance = action.computeDistance(indexs);
+            distance = RouteAlgorithm.computeDistance(this.action.getGraph(),indexs);
            
         }
         return distance;
@@ -129,7 +128,7 @@ public class Output {
     //The distance of the route  A-E-B-C-D.
     public float output4() {
         float distance = 0;
-        if(this.action != null){
+        if(this.action != null && this.action.getGraph() != null){
             Vector<String> vList = action.getGraph().getvList();
             int indexA = vList.indexOf("A");
             int indexE = vList.indexOf("E");
@@ -137,7 +136,7 @@ public class Output {
             int indexC = vList.indexOf("C");
             int indexD = vList.indexOf("D");            
             int[] indexs = new int[]{indexA, indexE, indexB, indexC, indexD};
-            distance = action.computeDistance(indexs);
+            distance = RouteAlgorithm.computeDistance(this.action.getGraph(),indexs);
            
         }
         return distance;
@@ -146,13 +145,13 @@ public class Output {
     //The distance of the route A-E-D.
     public float output5() {
         float distance = 0;
-        if(this.action != null){
+        if(this.action != null && this.action.getGraph() != null){
             Vector<String> vList = action.getGraph().getvList();
             int indexA = vList.indexOf("A");
             int indexE = vList.indexOf("E");
             int indexD = vList.indexOf("D");            
             int[] indexs = new int[]{indexA, indexE, indexD};
-            distance = action.computeDistance(indexs);
+            distance = RouteAlgorithm.computeDistance(this.action.getGraph(),indexs);
             
         }
         return distance;
@@ -161,8 +160,8 @@ public class Output {
     //The number of trips starting at C and ending at C with a maximum of 3 stops.
     public int output6() {
         int num = 0;
-        if(this.action != null){            
-            num = action.routeNum("C", "C", 3, true);
+        if(this.action != null && this.action.getGraph() != null){            
+            num = RouteAlgorithm.routesNum(action.getGraph(),"C", "C", 3, true);
             
         }
         return num;
@@ -171,8 +170,8 @@ public class Output {
     //The number of trips starting at A and ending at C with exactly 4 stops.
     public int output7() {
         int num = 0;
-        if(this.action != null){            
-            num = action.routeNum("A", "C", 4, false);
+        if(this.action != null && this.action.getGraph() != null){            
+            num = RouteAlgorithm.routesNum(action.getGraph(),"A", "C", 4, false);
             
         }
         return num;
@@ -184,7 +183,7 @@ public class Output {
         if(this.action != null){            
             String v1 = "A";
             String v2 = "C";
-            distance = action.shortestRoute(v1, v2);
+            distance = RouteAlgorithm.dijkstra(this.action.getGraph(),v1, v2);
             
         }
         return distance;
@@ -196,7 +195,7 @@ public class Output {
         if(this.action != null){            
             String v1 = "B";
             String v2 = "B";
-            distance = action.shortestRoute(v1, v2);
+            distance = RouteAlgorithm.dijkstra(this.action.getGraph(),v1, v2);
             
         }
          return distance;
@@ -205,8 +204,8 @@ public class Output {
     //The number of different routes from C to C with a distance of less than 30.
     public int output10() {
         int num = 0;
-        if(this.action != null){            
-            num = action.routeNumLimitedByDistance("C", "C", 30);
+        if(this.action != null && this.action.getGraph() != null){            
+            num = RouteAlgorithm.routesNumLimitedByDistance(action.getGraph(),"C", "C", 30);
             
         }
         return num;
