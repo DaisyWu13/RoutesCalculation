@@ -5,7 +5,7 @@
  */
 package route.test;
 
-import route.caculation.Output;
+import route.output.Output;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
