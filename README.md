@@ -37,7 +37,7 @@ Here is the demo, containing 10 outputs for the shortest distance and how many t
 7.How to use
 The graph pakage is composed of the route algorithm and the graph model, the value in the vertex could be anything.
 
-e.g.
+e.i.
 
     List<String> list = readEdgeFromTxt(txtPath);
     Route route = new RouteOfString(list);
