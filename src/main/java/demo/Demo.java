@@ -156,7 +156,15 @@ public class Demo {
     public int output6() {
         int num = 0;
         if (this.route != null && this.route.getGraph() != null) {
-            num = GraphAlgorithm.routesNum(route.getGraph(), "C", "C", 3, true);
+            String v1 = "C";
+            String v2 = "C";
+            Vector<String> vList = this.route.getGraph().getvList();
+            int srcIndex = vList.indexOf(v1);
+            int destIndex = vList.indexOf(v2);
+            if (srcIndex == -1 || destIndex == -1) {
+                return -1;
+            }
+            num = GraphAlgorithm.routesNum(route.getGraph(), srcIndex, destIndex, 3, true);
 
         }
         return num;
@@ -166,7 +174,15 @@ public class Demo {
     public int output7() {
         int num = 0;
         if (this.route != null && this.route.getGraph() != null) {
-            num = GraphAlgorithm.routesNum(route.getGraph(), "A", "C", 4, false);
+            String v1 = "A";
+            String v2 = "C";
+            Vector<String> vList = this.route.getGraph().getvList();
+            int srcIndex = vList.indexOf(v1);
+            int destIndex = vList.indexOf(v2);
+            if (srcIndex == -1 || destIndex == -1) {
+                return -1;
+            }
+            num = GraphAlgorithm.routesNum(route.getGraph(), srcIndex, destIndex, 4, false);
 
         }
         return num;
@@ -178,7 +194,13 @@ public class Demo {
         if (this.route != null) {
             String v1 = "A";
             String v2 = "C";
-            distance = GraphAlgorithm.dijkstra(this.route.getGraph(), v1, v2);
+            Vector<String> vList = this.route.getGraph().getvList();
+            int srcIndex = vList.indexOf(v1);
+            int destIndex = vList.indexOf(v2);
+            if (srcIndex == -1 || destIndex == -1) {
+                return -1;
+            }
+            distance = GraphAlgorithm.dijkstra(this.route.getGraph(), srcIndex, destIndex);
 
         }
         return distance;
@@ -190,7 +212,13 @@ public class Demo {
         if (this.route != null) {
             String v1 = "B";
             String v2 = "B";
-            distance = GraphAlgorithm.dijkstra(this.route.getGraph(), v1, v2);
+            Vector<String> vList = this.route.getGraph().getvList();
+            int srcIndex = vList.indexOf(v1);
+            int destIndex = vList.indexOf(v2);
+            if (srcIndex == -1 || destIndex == -1) {
+                return -1;
+            }
+            distance = GraphAlgorithm.dijkstra(this.route.getGraph(), srcIndex, destIndex);
 
         }
         return distance;
@@ -200,7 +228,15 @@ public class Demo {
     public int output10() {
         int num = 0;
         if (this.route != null && this.route.getGraph() != null) {
-            num = GraphAlgorithm.routesNumLimitedByDistance(route.getGraph(), "C", "C", 30);
+            String v1 = "C";
+            String v2 = "C";
+            Vector<String> vList = this.route.getGraph().getvList();
+            int srcIndex = vList.indexOf(v1);
+            int destIndex = vList.indexOf(v2);
+            if (srcIndex == -1 || destIndex == -1) {
+                return -1;
+            }
+            num = GraphAlgorithm.routesNumLimitedByDistance(route.getGraph(), srcIndex, destIndex, 30);
 
         }
         return num;

@@ -22,6 +22,9 @@ It offers two kinds of algorithms, one is to compute the shortest distance betwe
 - routesNumLimit
 ![routesNumLimit diagram](image/routes-num-limit.png)
 
+- computeDistance
+![computeDistance diagram](image/compute-distance.png)
+
 
 5.RouteOfString
 This class mainly describes a route, which has a graph in. The mainly works here is to init a graph describing train routes.

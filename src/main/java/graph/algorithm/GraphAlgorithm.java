@@ -16,20 +16,14 @@ public class GraphAlgorithm {
     /**
      * compute the shortest distance between two vertexes, according to Dijkstra
      *
-     * @param vertex1
-     * @param vertex2
+     * @param graph
+     * @param srcIndex
+     * @param destIndex
+     * @return
      */
-    public static double dijkstra(Graph graph, String vertex1, String vertex2) {
-        Vector<String> vList = graph.getvList();
-        int index1 = vList.indexOf(vertex1);
-        int index2 = vList.indexOf(vertex2);
-        if (index1 == -1 || index2 == -1) {
-            return -1;
-        }
-
+    public static double dijkstra(Graph graph, int srcIndex, int destIndex) {
         final int N = graph.getvNum();
         double[][] edges = graph.getEdges();
-
         //init
         // a set for storing processed vertex, the processed is 1, else is 0
         int[] set = new int[N];
@@ -39,28 +33,21 @@ public class GraphAlgorithm {
         int[] parent = new int[N];
         for (int i = 0; i < N; i++) {
             set[i] = 0;
-            d[i] = edges[index1][i];
+            d[i] = edges[srcIndex][i];
             parent[i] = 0;
         }
-        //set[index1]=1;
+        //set[srcIndex]=1;
         // if the start vertex is processed, it won't be calculated after
-        parent[index1] = -1;
+        parent[srcIndex] = -1;
 
         //compute the shortest route, starting at original vertex to any vertex k, then add k to set
         for (int i = 1; i <= N; i++) {
-            double min = MAX;
             //the minimum vertex
-            int minIndex = 0;
-            for (int k = 0; k < N; k++) {
-                if (set[k] == 0 && d[k] < min) {
-                    min = d[k];
-                    minIndex = k;
-                }
-            }
+            int minIndex = findMinIndex(N, set, d);
             //added into set
             set[minIndex] = 1;
             //if the current vertex is the destination, then break, else modify the distance to other unprocessed vertex
-            if (minIndex == index2) {
+            if (minIndex == destIndex) {
                 break;
             } else {
                 for (int k = 0; k < N; k++) {
@@ -73,8 +60,20 @@ public class GraphAlgorithm {
 
         }
 
-        return d[index2];
+        return d[destIndex];
 
+    }
+
+    private static int findMinIndex(int n, int[] set, double[] d) {
+        int minIndex = 0;
+        double min = MAX;
+        for (int k = 0; k < n; k++) {
+            if (set[k] == 0 && d[k] < min) {
+                min = d[k];
+                minIndex = k;
+            }
+        }
+        return minIndex;
     }
 
     /**
@@ -84,19 +83,17 @@ public class GraphAlgorithm {
      * be calculate, due to the dest vertex is given the program only saves the
      * current level nodes and the last level nodes in 2 queues
      *
-     * @param srcVertex
-     * @param destVertex
-     * @param level : stops number
-     * @param total :if all 1-level of the routes length are concerned is true,
-     * else only to compute the number of routes, length as level
+     * @param graph
+     * @param srcIndex
+     * @param destIndex
+     * @param level
+     * @param total
+     * @return
      */
-    public static int routesNum(Graph graph, String srcVertex, String destVertex, int level, boolean total) {
+    public static int routesNum(Graph graph, int srcIndex, int destIndex, int level, boolean total) {
         int num = 0;
         int N = graph.getvNum();
-        Vector<String> vList = graph.getvList();
         double[][] edges = graph.getEdges();
-        int srcIndex = vList.indexOf(srcVertex);
-        int destIndex = vList.indexOf(destVertex);
         LinkedList<Integer> queue = new LinkedList<Integer>();
         if (srcIndex == -1 || destIndex == -1) {
             return -1;
@@ -146,18 +143,16 @@ public class GraphAlgorithm {
 
     /**
      *
-     * @param srcVertex
-     * @param destVertex
+     * @param graph
+     * @param srcIndex
+     * @param destIndex
      * @param distance
      * @return
      */
-    public static int routesNumLimitedByDistance(Graph graph, String srcVertex, String destVertex, double distance) {
+    public static int routesNumLimitedByDistance(Graph graph, int srcIndex, int destIndex, double distance) {
         int num = 0;
         int N = graph.getvNum();
-        Vector<String> vList = graph.getvList();
         double[][] edges = graph.getEdges();
-        int srcIndex = vList.indexOf(srcVertex);
-        int destIndex = vList.indexOf(destVertex);
         LinkedList<Node> queue = null;
         if (distance > MAX || srcIndex == -1 || destIndex == -1) {
             return -1;
