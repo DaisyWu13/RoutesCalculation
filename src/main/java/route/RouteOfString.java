@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.Vector;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -36,7 +37,7 @@ public class RouteOfString {
 
     public RouteOfString(List<String> list) {
         this.graph = CreateGraph(list);
-        Graph.initEdges(this.graph);
+        this.graph.initEdges();
     }
 
     /**
@@ -51,16 +52,31 @@ public class RouteOfString {
             edgeList = new Vector<Edge<String>>();
             for (String subStr : list) {
                 subStr = subStr.trim();
-                if (subStr != null) {
-                    Edge<String> edge = new Edge<String>();
-                    int len = subStr.length();
-                    Vertex<String> vertStart = new Vertex<String>(subStr.substring(len - 3, len - 2));
-                    Vertex<String> vertEnd = new Vertex<String>(subStr.substring(len - 2, len - 1));
-                    edge.setVertStart(vertStart);
-                    edge.setVertEnd(vertEnd);
-                    edge.setDistance(Integer.valueOf(subStr.substring(len - 1)));
-                    edgeList.addElement(edge);
+                if (StringUtils.isBlank(subStr)) {
+                    continue;
                 }
+                Edge<String> edge = new Edge<String>();
+                int len = subStr.length();
+                int index = 0;
+                //record blank string
+                while (index < len) {
+                    char c = subStr.charAt(index);
+                    if (c >= 'A' && c <= 'Z') {
+                        break;
+                    }
+                    index++;
+                }
+                if ((len - index) < 3) {
+                    continue;
+                }
+
+                Vertex<String> vertStart = new Vertex<String>(subStr.substring(index, ++index));
+                Vertex<String> vertEnd = new Vertex<String>(subStr.substring(index, ++index));
+                edge.setVertStart(vertStart);
+                edge.setVertEnd(vertEnd);
+                edge.setDistance(Integer.valueOf(subStr.substring(index, len)));
+                edgeList.addElement(edge);
+
             }
 
         }
@@ -117,6 +133,5 @@ public class RouteOfString {
         graph.setEdges(edges);
         return graph;
     }
-
 
 }

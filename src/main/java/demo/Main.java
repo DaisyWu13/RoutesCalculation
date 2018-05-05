@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String txtPath = null;
         System.out.println("Please input the path of the input text file!");
         //read the txt path from console
@@ -20,8 +20,7 @@ public class Main {
             txtPath = br.readLine();
             br.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw e;
         }
         File file = new File(txtPath);
         if (!file.exists()) {

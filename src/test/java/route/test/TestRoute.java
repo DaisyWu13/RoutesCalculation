@@ -1,6 +1,7 @@
 package route.test;
 
 import demo.Demo;
+import java.io.IOException;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
@@ -17,7 +18,7 @@ public class TestRoute {
     private Demo demo;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         input = "input.txt";
         demo = new Demo(input);
     }
@@ -28,7 +29,7 @@ public class TestRoute {
     }
 
     @Test
-    public void testNotExistFile() {
+    public void testNotExistFile() throws IOException {
         Demo demo = new Demo("input1.txt");
         assertEquals(null, demo.getRoute());
 

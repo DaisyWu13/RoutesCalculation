@@ -1,5 +1,6 @@
 package demo;
 
+import graph.action.*;
 import route.RouteOfString;
 import java.util.Vector;
 import java.io.BufferedReader;
@@ -14,7 +15,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import graph.algorithm.GraphAlgorithm;
+import graph.invoker.Invoker;
 
 /**
  *
@@ -33,18 +34,18 @@ public class Demo {
         this.route = route;
     }
 
-    public Demo(String txtPath) {
+    public Demo(String txtPath) throws IOException {
         try {
             List<String> list = readEdgeFromTxt(txtPath);
             if (CollectionUtils.isNotEmpty(list)) {
                 route = new RouteOfString(list);
             }
-        } catch (Exception e) {
-            logger.error("construct error", e);
+        } catch (IOException e) {
+            throw e;
         }
     }
 
-    private List<String> readEdgeFromTxt(String txtPath) throws Exception {
+    private List<String> readEdgeFromTxt(String txtPath) throws IOException {
         List<String> edgeList = null;
         if (txtPath != null) {
             File file = new File(txtPath);
@@ -64,8 +65,7 @@ public class Demo {
                         }
                     }
 
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                } catch (IOException e) {
                     throw e;
                 }
             } else {
@@ -84,7 +84,10 @@ public class Demo {
             int indexB = vList.indexOf("B");
             int indexC = vList.indexOf("C");
             int[] indexs = new int[]{indexA, indexB, indexC};
-            distance = GraphAlgorithm.computeDistance(this.route.getGraph(), indexs);
+            ComputeDistanceAction action = new ComputeDistanceAction(this.route.getGraph(), indexs);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            distance = action.getResult();
 
         }
         return distance;
@@ -98,7 +101,10 @@ public class Demo {
             int indexA = vList.indexOf("A");
             int indexD = vList.indexOf("D");
             int[] indexs = new int[]{indexA, indexD};
-            distance = GraphAlgorithm.computeDistance(this.route.getGraph(), indexs);
+            ComputeDistanceAction action = new ComputeDistanceAction(this.route.getGraph(), indexs);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            distance = action.getResult();
 
         }
         return distance;
@@ -114,7 +120,10 @@ public class Demo {
             int indexD = vList.indexOf("D");
             int indexC = vList.indexOf("C");
             int[] indexs = new int[]{indexA, indexD, indexC};
-            distance = GraphAlgorithm.computeDistance(this.route.getGraph(), indexs);
+            ComputeDistanceAction action = new ComputeDistanceAction(this.route.getGraph(), indexs);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            distance = action.getResult();
 
         }
         return distance;
@@ -131,7 +140,10 @@ public class Demo {
             int indexC = vList.indexOf("C");
             int indexD = vList.indexOf("D");
             int[] indexs = new int[]{indexA, indexE, indexB, indexC, indexD};
-            distance = GraphAlgorithm.computeDistance(this.route.getGraph(), indexs);
+            ComputeDistanceAction action = new ComputeDistanceAction(this.route.getGraph(), indexs);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            distance = action.getResult();
 
         }
         return distance;
@@ -146,7 +158,10 @@ public class Demo {
             int indexE = vList.indexOf("E");
             int indexD = vList.indexOf("D");
             int[] indexs = new int[]{indexA, indexE, indexD};
-            distance = GraphAlgorithm.computeDistance(this.route.getGraph(), indexs);
+            ComputeDistanceAction action = new ComputeDistanceAction(this.route.getGraph(), indexs);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            distance = action.getResult();
 
         }
         return distance;
@@ -164,7 +179,10 @@ public class Demo {
             if (srcIndex == -1 || destIndex == -1) {
                 return -1;
             }
-            num = GraphAlgorithm.routesNum(route.getGraph(), srcIndex, destIndex, 3, true);
+            RoutesNumAction action = new RoutesNumAction(this.route.getGraph(), srcIndex, destIndex, 3, true);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            num = action.getResult();
 
         }
         return num;
@@ -182,7 +200,10 @@ public class Demo {
             if (srcIndex == -1 || destIndex == -1) {
                 return -1;
             }
-            num = GraphAlgorithm.routesNum(route.getGraph(), srcIndex, destIndex, 4, false);
+            RoutesNumAction action = new RoutesNumAction(this.route.getGraph(), srcIndex, destIndex, 4, false);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            num = action.getResult();
 
         }
         return num;
@@ -200,7 +221,10 @@ public class Demo {
             if (srcIndex == -1 || destIndex == -1) {
                 return -1;
             }
-            distance = GraphAlgorithm.dijkstra(this.route.getGraph(), srcIndex, destIndex);
+            DijkstraAction action = new DijkstraAction(this.route.getGraph(), srcIndex, destIndex);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            distance = action.getResult();
 
         }
         return distance;
@@ -218,7 +242,10 @@ public class Demo {
             if (srcIndex == -1 || destIndex == -1) {
                 return -1;
             }
-            distance = GraphAlgorithm.dijkstra(this.route.getGraph(), srcIndex, destIndex);
+            DijkstraAction action = new DijkstraAction(this.route.getGraph(), srcIndex, destIndex);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            distance = action.getResult();
 
         }
         return distance;
@@ -236,7 +263,10 @@ public class Demo {
             if (srcIndex == -1 || destIndex == -1) {
                 return -1;
             }
-            num = GraphAlgorithm.routesNumLimitedByDistance(route.getGraph(), srcIndex, destIndex, 30);
+            RoutesNumLimitedAction action = new RoutesNumLimitedAction(this.route.getGraph(), srcIndex, destIndex, 30);
+            Invoker invoker = new Invoker(action);
+            invoker.runAction();
+            num = action.getResult();
 
         }
         return num;
