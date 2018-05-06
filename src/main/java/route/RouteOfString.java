@@ -58,15 +58,7 @@ public class RouteOfString {
                 Edge<String> edge = new Edge<String>();
                 int len = subStr.length();
                 int index = 0;
-                //record blank string
-                while (index < len) {
-                    char c = subStr.charAt(index);
-                    if (c >= 'A' && c <= 'Z') {
-                        break;
-                    }
-                    index++;
-                }
-                if ((len - index) < 3) {
+                if (len < 3) {
                     continue;
                 }
 

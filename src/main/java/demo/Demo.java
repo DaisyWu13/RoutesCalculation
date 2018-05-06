@@ -16,6 +16,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import graph.invoker.Invoker;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -25,6 +28,7 @@ public class Demo {
 
     private Log logger = LogFactory.getLog(Demo.class);
     private RouteOfString route;
+    private static final String ROUTEPATTERN = "^[A-Z]{2}[0-9]{1,9}";
 
     public RouteOfString getRoute() {
         return route;
@@ -59,9 +63,30 @@ public class Demo {
                         String[] s = line.split(",");
                         for (String str : s) {
                             str = str.trim();
-                            if (str != null) {
-                                edgeList.add(str);
+                            if (StringUtils.isBlank(str)) {
+                                continue;
                             }
+                            int len = str.length();
+                            int index = 0;
+                            //record blank string
+                            while (index < len) {
+                                char c = str.charAt(index);
+                                if (c >= 'A' && c <= 'Z') {
+                                    break;
+                                }
+                                index++;
+                            }
+                            if (index >= len) {
+                                continue;
+                            }
+                            str = str.substring(index);
+                            Pattern pattern = Pattern.compile(ROUTEPATTERN);
+                            Matcher match = pattern.matcher(str);
+                            if(!match.matches()){
+                                return edgeList;
+                            }
+                            edgeList.add(str);
+
                         }
                     }
 
