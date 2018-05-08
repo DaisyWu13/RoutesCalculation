@@ -10,7 +10,6 @@ Maily for describing a route with a start point, an ending point, and the distan
 The graph stores the key value of vertex, the index in vertex maps to the index of vertex in vertex list, 
 and the distance between vertex, the row and colum index maps to index of vertex in vertex list.
 
-4.GraphAlgorithm
 It offers two kinds of algorithms, one is to compute the shortest distance between two points, another is to compute the numbers of routes between points.
 
 - dijkstra
@@ -25,22 +24,37 @@ It offers two kinds of algorithms, one is to compute the shortest distance betwe
 - computeDistance
 ![computeDistance diagram](image/compute-distance.png)
 
+4.Graph Action(command of graph action)
 
-5.RouteOfString
+- DijkstraAction( a pakage of dijkstra of the graph)
+
+- RoutesNumAction( a pakage of routesNum of the graph)
+
+- RoutesNumLimitedAction( a pakage of routesNumLimit of the graph)
+
+- ComputeDistanceAction( a pakage of computeDistance of the graph)
+
+5.GraphInvoker
+A intermediary between graph and mandator.
+
+6.RouteOfString
 This class mainly describes a route, which has a graph in. The mainly works here is to init a graph describing train routes.
 - CreateGraph
 - initEdges
 
-6.Demo
+7.Demo
 Here is the demo, containing 10 outputs for the shortest distance and how many the routes is between points.
 
-7.How to use
+8.How to use
 The graph pakage is composed of the route algorithm and the graph model, the value in the vertex could be anything.
 
 e.i.
 
     List<String> list = readEdgeFromTxt(txtPath);
     Route route = new RouteOfString(list);
-    double d = GraphAlgorithm.computeDistance(this.route.getGraph(), indexs);
+    ComputeDistanceAction action = new ComputeDistanceAction(this.route.getGraph(), indexs);
+    GraphInvoker invoker = new GraphInvoker(action);
+    invoker.runAction();
+    distance = action.getResult();
 
 

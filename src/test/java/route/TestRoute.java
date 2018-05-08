@@ -1,4 +1,4 @@
-package route.test;
+package route;
 
 import demo.Demo;
 import java.io.IOException;

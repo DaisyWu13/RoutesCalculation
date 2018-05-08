@@ -6,11 +6,11 @@ import graph.action.IGraphAction;
  *
  * @author Daisy Wu
  */
-public class Invoker {
+public class GraphInvoker {
 
     private IGraphAction action;
 
-    public Invoker(IGraphAction action) {
+    public GraphInvoker(IGraphAction action) {
         this.action = action;
     }
 
