@@ -1,4 +1,4 @@
-This project mainly supplies some methods to compute routes between two given vertexes
+This project, built by maven and written by Java, mainly supplies some methods to compute routes between the given vertexes.
 
 1.Vertex
 
@@ -51,6 +51,8 @@ This class mainly describes a route, which has a graph in. The mainly works here
 
 Here is the demo, containing 10 outputs for the shortest distance and how many the routes is between points.
 
+The Mian class is the entrance of the demo.
+
 8.How to use
 
 The graph pakage is composed of the route algorithm and the graph model, the value in the vertex could be anything.
@@ -63,5 +65,6 @@ e.i.
     GraphInvoker invoker = new GraphInvoker(action);
     invoker.runAction();
     distance = action.getResult();
+	
 
 
