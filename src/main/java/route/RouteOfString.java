@@ -90,7 +90,7 @@ public class RouteOfString {
      * @param list
      */
     public Graph<String> CreateGraph(List<String> list) {
-        Graph<String> graph = new Graph<>();
+        Graph<String> graph = new Graph<String>();
         graph.setEdgeList(readEdge(list));
         graph.setvList(getVertexTreeset(graph.getEdgeList()));
         int vNum = graph.getvList().size();

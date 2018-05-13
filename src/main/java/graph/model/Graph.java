@@ -11,8 +11,14 @@ import org.apache.commons.collections.CollectionUtils;
 public class Graph<V> extends AbstractGraph {
 
     public static final int MAX_DISTANCE = Integer.MAX_VALUE;
-    private Vector<Edge<V>> edgeList;//store all the edges
-    private Vector<V> vList;//store the key value of vertex
+    //store all the edges
+    private Vector<Edge<V>> edgeList;
+    //store the key value of vertex
+    private Vector<V> vList;
+
+    public Graph() {
+        
+    }
 
     public Vector<Edge<V>> getEdgeList() {
         return edgeList;
@@ -33,10 +39,6 @@ public class Graph<V> extends AbstractGraph {
     public Graph(int size) {
         this.setEdges(new double[size][size]);
         this.setvNum(size);
-    }
-
-    public Graph() {
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -64,7 +66,6 @@ public class Graph<V> extends AbstractGraph {
     public double dijkstra(int srcIndex, int destIndex) {
         final int N = this.getvNum();
         double[][] edges = this.getEdges();
-        //init
         // a set for storing processed vertex, the processed is 1, else is 0
         int[] set = new int[N];
         //the distance from start vertex
@@ -76,10 +77,8 @@ public class Graph<V> extends AbstractGraph {
             d[i] = edges[srcIndex][i];
             parent[i] = 0;
         }
-        //set[srcIndex]=1;
         // if the start vertex is processed, it won't be calculated after
         parent[srcIndex] = -1;
-
         //compute the shortest route, starting at original vertex to any vertex k, then add k to set
         for (int i = 1; i <= N; i++) {
             //the minimum vertex
@@ -89,21 +88,19 @@ public class Graph<V> extends AbstractGraph {
             //if the current vertex is the destination, then break, else modify the distance to other unprocessed vertex
             if (minIndex == destIndex) {
                 break;
-            } else {
-                for (int k = 0; k < N; k++) {
-                    if (set[k] == 0 && (d[minIndex] + edges[minIndex][k] < d[k])) {
-                        d[k] = d[minIndex] + edges[minIndex][k];
-                        parent[k] = minIndex;
-                    }
+            }
+            for (int k = 0; k < N; k++) {
+                if (set[k] == 0 && (d[minIndex] + edges[minIndex][k] < d[k])) {
+                    d[k] = d[minIndex] + edges[minIndex][k];
+                    parent[k] = minIndex;
                 }
             }
-
         }
 
         return d[destIndex];
     }
 
-    private static int findMinIndex(int n, int[] set, double[] d) {
+    private int findMinIndex(int n, int[] set, double[] d) {
         int minIndex = 0;
         double min = MAX_DISTANCE;
         for (int k = 0; k < n; k++) {
@@ -138,94 +135,112 @@ public class Graph<V> extends AbstractGraph {
 
     @Override
     public int routesNum(int srcIndex, int destIndex, int level, boolean total) {
-        int num = 0;
-        int N = this.getvNum();
-        double[][] edges = this.getEdges();
-        LinkedList<Integer> queue = new LinkedList<Integer>();
+        int routeNum = 0;
+        LinkedList<Integer> queue = new LinkedList<>();
         if (srcIndex == -1 || destIndex == -1) {
             return -1;
         }
-
         queue.add(srcIndex);
         //start at 1 stops
         for (int i = 1; i <= level; i++) {
             if (total) {
-                for (int row : queue) {
-                    if (edges[row][destIndex] != MAX_DISTANCE) {
-                        num++;
-                    }
-                }
+                routeNum += findRouteCount(queue, destIndex);
             }
             if (!total && i == level) {
-                for (int row : queue) {
-                    if (edges[row][destIndex] != MAX_DISTANCE) {
-                        num++;
-                    }
-                }
+                routeNum += findRouteCount(queue, destIndex);
             }
             if (i != level) {
-                LinkedList<Integer> queueLevel = new LinkedList<Integer>();
-                for (int row : queue) {
-                    for (int column = 0; column < N; column++) {
-                        if (edges[row][column] != MAX_DISTANCE) {
-                            queueLevel.addFirst(column);
-                        }
-                    }
-                }
-
+                LinkedList<Integer> queueLevel = getCurrentLevelQueue(queue);
                 queue.clear();
                 queue = queueLevel;
-                queueLevel = null;
-
             }
 
         }
 
-        if (num > 0) {
-            return num;
+        if (routeNum > 0) {
+            return routeNum;
         }
         return -1;
     }
 
+    private int findRouteCount(LinkedList<Integer> queue, int destIndex) {
+        int routeNum = 0;
+        double[][] edges = this.getEdges();
+        for (int row : queue) {
+            if (edges[row][destIndex] == MAX_DISTANCE) {
+                continue;
+            }
+            routeNum++;
+        }
+        return routeNum;
+    }
+
+    private LinkedList<Integer> getCurrentLevelQueue(LinkedList<Integer> queue) {
+        LinkedList<Integer> queueLevel = new LinkedList<>();
+        double[][] edges = this.getEdges();
+        int verNum = this.getvNum();
+        for (int row : queue) {
+            for (int column = 0; column < verNum; column++) {
+                if (edges[row][column] == MAX_DISTANCE) {
+                    continue;
+                }
+                queueLevel.addFirst(column);
+            }
+        }
+        return queueLevel;
+    }
+
     @Override
     public int routesNumLimitedByDistance(int srcIndex, int destIndex, double distance) {
-        int num = 0;
-        int N = this.getvNum();
-        double[][] edges = this.getEdges();
+        int routeNum = 0;
         LinkedList<Node> queue = null;
         if (distance > MAX_DISTANCE || srcIndex == -1 || destIndex == -1) {
             return -1;
         }
 
-        queue = new LinkedList<Node>();
+        queue = new LinkedList<>();
         queue.addFirst(new Node(srcIndex, 0));
         for (int i = 1;; i++) {
-            for (Node node : queue) {
-                if ((node.getDistance() + edges[node.getIndex()][destIndex]) < distance) {
-                    num++;
-                }
-            }
-            LinkedList<Node> queueLevel = new LinkedList<Node>();
-            for (Node node : queue) {
-                for (int column = 0; column < N; column++) {
-                    if ((node.getDistance() + edges[node.getIndex()][column]) < distance) {
-                        queueLevel.addFirst(new Node(column, node.getDistance() + edges[node.getIndex()][column]));
-                    }
-                }
-            }
-
+            routeNum += findLimitedRouteCount(queue, destIndex, distance);
+            LinkedList<Node> queueLevel = getLimitedCurrentLevelQueue(queue, distance);
             queue.clear();
             queue = queueLevel;
-            queueLevel = null;
-            if (queue.size() <= 0) {
+            if (CollectionUtils.isEmpty(queue)) {
                 break;
             }
         }
 
-        if (num > 0) {
-            return num;
+        if (routeNum > 0) {
+            return routeNum;
         }
         return -1;
+    }
+
+    private int findLimitedRouteCount(LinkedList<Node> queue, int destIndex, double distance) {
+        int routeNum = 0;
+        double[][] edges = this.getEdges();
+        for (Node node : queue) {
+            if ((node.getDistance() + edges[node.getIndex()][destIndex]) >= distance) {
+                continue;
+            }
+            routeNum++;
+        }
+        return routeNum;
+    }
+
+    private LinkedList<Node> getLimitedCurrentLevelQueue(LinkedList<Node> queue, double distance) {
+        LinkedList<Node> queueLevel = new LinkedList<>();
+        double[][] edges = this.getEdges();
+        int verNum = this.getvNum();
+        for (Node node : queue) {
+            for (int column = 0; column < verNum; column++) {
+                if ((node.getDistance() + edges[node.getIndex()][column]) >= distance) {
+                    continue;
+                }
+                queueLevel.addFirst(new Node(column, node.getDistance() + edges[node.getIndex()][column]));
+            }
+        }
+        return queueLevel;
     }
 
     class Node {
