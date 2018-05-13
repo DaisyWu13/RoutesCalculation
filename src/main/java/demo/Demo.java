@@ -11,8 +11,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import graph.invoker.GraphInvoker;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +23,7 @@ import org.apache.commons.lang.StringUtils;
 public class Demo {
 
     private static final String ROUTEPATTERN = "^[A-Z]{2}[0-9]{1,9}";
-    private Log logger = LogFactory.getLog(Demo.class);
+    
     private RouteOfString route;
 
     public RouteOfString getRoute() {

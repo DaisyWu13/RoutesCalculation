@@ -4,12 +4,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
  * @author Daisy Wu
  */
 public class Main {
+
+    private static Log logger = LogFactory.getLog(Demo.class);
 
     public static void main(String[] args) throws IOException {
         String txtPath = null;
@@ -24,7 +28,7 @@ public class Main {
         }
         File file = new File(txtPath);
         if (!file.exists()) {
-            System.out.println(txtPath + " :this file doesn't exist!");
+            logger.info(txtPath + " :this file doesn't exist!");
             return;
         }
         Demo out = new Demo(txtPath);
