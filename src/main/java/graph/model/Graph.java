@@ -19,7 +19,7 @@ public class Graph<V> extends AbstractGraph {
     public Graph() {
         this.setvNum(0);
     }
-    
+
     public Graph(int size) {
         this.setEdges(new double[size][size]);
         this.setvNum(size);
@@ -40,7 +40,6 @@ public class Graph<V> extends AbstractGraph {
     public void setvList(Vector<V> vList) {
         this.vList = vList;
     }
-
 
     @Override
     public void initEdges() {
@@ -65,38 +64,22 @@ public class Graph<V> extends AbstractGraph {
 
     @Override
     public double dijkstra(int srcIndex, int destIndex) {
-        final int N = this.getvNum();
+        final int verNum = this.getvNum();
         double[][] edges = this.getEdges();
         // a set for storing processed vertex, the processed is 1, else is 0
-        int[] set = new int[N];
+        int[] set = new int[verNum];
         //the distance from start vertex
-        double[] d = new double[N];
+        double[] d = new double[verNum];
         // the previous vertex index in the shortest route
-        int[] parent = new int[N];
-        for (int i = 0; i < N; i++) {
+        int[] parent = new int[verNum];
+        for (int i = 0; i < verNum; i++) {
             set[i] = 0;
             d[i] = edges[srcIndex][i];
             parent[i] = 0;
         }
         // if the start vertex is processed, it won't be calculated after
         parent[srcIndex] = -1;
-        //compute the shortest route, starting at original vertex to any vertex k, then add k to set
-        for (int i = 1; i <= N; i++) {
-            //the minimum vertex
-            int minIndex = findMinIndex(N, set, d);
-            //added into set
-            set[minIndex] = 1;
-            //if the current vertex is the destination, then break, else modify the distance to other unprocessed vertex
-            if (minIndex == destIndex) {
-                break;
-            }
-            for (int k = 0; k < N; k++) {
-                if (set[k] == 0 && (d[minIndex] + edges[minIndex][k] < d[k])) {
-                    d[k] = d[minIndex] + edges[minIndex][k];
-                    parent[k] = minIndex;
-                }
-            }
-        }
+        updateMinDistance(set, d, parent, destIndex);
 
         return d[destIndex];
     }
@@ -111,6 +94,28 @@ public class Graph<V> extends AbstractGraph {
             }
         }
         return minIndex;
+    }
+
+    private void updateMinDistance(int[] set, double[] d, int[] parent, int destIndex) {
+        final int verNum = this.getvNum();
+        double[][] edges = this.getEdges();
+        //compute the shortest route, starting at original vertex to any vertex k, then add k to set
+        for (int i = 1; i <= verNum; i++) {
+            //the minimum vertex
+            int minIndex = findMinIndex(verNum, set, d);
+            //added into set
+            set[minIndex] = 1;
+            //if the current vertex is the destination, then break, else modify the distance to other unprocessed vertex
+            if (minIndex == destIndex) {
+                break;
+            }
+            for (int k = 0; k < verNum; k++) {
+                if (set[k] == 0 && (d[minIndex] + edges[minIndex][k] < d[k])) {
+                    d[k] = d[minIndex] + edges[minIndex][k];
+                    parent[k] = minIndex;
+                }
+            }
+        }
     }
 
     @Override
