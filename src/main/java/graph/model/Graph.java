@@ -17,7 +17,12 @@ public class Graph<V> extends AbstractGraph {
     private Vector<V> vList;
 
     public Graph() {
-        
+        this.setvNum(0);
+    }
+    
+    public Graph(int size) {
+        this.setEdges(new double[size][size]);
+        this.setvNum(size);
     }
 
     public Vector<Edge<V>> getEdgeList() {
@@ -36,10 +41,6 @@ public class Graph<V> extends AbstractGraph {
         this.vList = vList;
     }
 
-    public Graph(int size) {
-        this.setEdges(new double[size][size]);
-        this.setvNum(size);
-    }
 
     @Override
     public void initEdges() {
