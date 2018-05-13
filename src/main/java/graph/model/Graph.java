@@ -10,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
  */
 public class Graph<V> extends AbstractGraph {
 
+    public static final int MAX_DISTANCE = Integer.MAX_VALUE;
     private Vector<Edge<V>> edgeList;//store all the edges
     private Vector<V> vList;//store the key value of vertex
 

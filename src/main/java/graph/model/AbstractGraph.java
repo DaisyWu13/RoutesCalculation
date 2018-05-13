@@ -6,7 +6,6 @@ package graph.model;
  */
 public abstract class AbstractGraph {
 
-    public static final int MAX_DISTANCE = Integer.MAX_VALUE;
     private double[][] edges;//store the distance between vertex
     private int vNum;//the number of vertexes
     private int edgeNum;//the number of edges
