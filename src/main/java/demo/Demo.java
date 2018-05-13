@@ -68,7 +68,7 @@ public class Demo {
         String[] strArray = line.split(",");
         for (String str : strArray) {
             String edgeStr = findEdgeString(str);
-            boolean isLegal = isLegalEdgeStr(edgeStr);
+            boolean isLegal = isEdgeStrLegal(edgeStr);
             if (!isLegal) {
                 break;
             }
@@ -98,7 +98,7 @@ public class Demo {
         return edgeStr.substring(index);
     }
 
-    private boolean isLegalEdgeStr(String edgeStr) {
+    private boolean isEdgeStrLegal(String edgeStr) {
         boolean isLegal = false;
         if (StringUtils.isBlank(edgeStr)) {
             return isLegal;
