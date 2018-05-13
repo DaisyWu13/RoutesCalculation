@@ -1,6 +1,6 @@
 package graph.action;
 
-import graph.model.IGraph;
+import graph.model.AbstractGraph;
 
 /**
  *
@@ -10,12 +10,12 @@ public class DijkstraAction implements IGraphAction {
 
     private double result;
 
-    private IGraph graph;
+    private AbstractGraph graph;
 
     private int srcIndex;
     private int destIndex;
 
-    public DijkstraAction(IGraph graph, int srcIndex, int destIndex) {
+    public DijkstraAction(AbstractGraph graph, int srcIndex, int destIndex) {
         this.graph = graph;
         this.srcIndex = srcIndex;
         this.destIndex = destIndex;

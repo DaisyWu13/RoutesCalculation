@@ -6,10 +6,8 @@ import java.util.Vector;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
@@ -26,9 +24,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Demo {
 
+    private static final String ROUTEPATTERN = "^[A-Z]{2}[0-9]{1,9}";
     private Log logger = LogFactory.getLog(Demo.class);
     private RouteOfString route;
-    private static final String ROUTEPATTERN = "^[A-Z]{2}[0-9]{1,9}";
 
     public RouteOfString getRoute() {
         return route;
@@ -50,57 +48,75 @@ public class Demo {
     }
 
     private List<String> readEdgeFromTxt(String txtPath) throws IOException {
-        List<String> edgeList = null;
-        if (txtPath != null) {
-            File file = new File(txtPath);
-            if (file.exists()) {
-                edgeList = new ArrayList<String>();
-                try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));
-                    String line = null;
-
-                    while ((line = br.readLine()) != null) {
-                        String[] s = line.split(",");
-                        for (String str : s) {
-                            str = str.trim();
-                            if (StringUtils.isBlank(str)) {
-                                continue;
-                            }
-                            int len = str.length();
-                            int index = 0;
-                            //record blank string
-                            while (index < len) {
-                                char c = str.charAt(index);
-                                if (c >= 'A' && c <= 'Z') {
-                                    break;
-                                }
-                                index++;
-                            }
-                            if (index >= len) {
-                                continue;
-                            }
-                            str = str.substring(index);
-                            Pattern pattern = Pattern.compile(ROUTEPATTERN);
-                            Matcher match = pattern.matcher(str);
-                            if(!match.matches()){
-                                return edgeList;
-                            }
-                            edgeList.add(str);
-
-                        }
-                    }
-
-                } catch (IOException e) {
-                    throw e;
-                }
-            } else {
-                logger.info("file does not exist: " + txtPath);
+        List<String> edgeList = new ArrayList<>();
+        File file = new File(txtPath);
+        if (null == txtPath || !file.exists()) {
+            return edgeList;
+        }
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "utf-8"));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                edgeList.addAll(extractEdgeFromLine(line));
             }
+        } catch (IOException e) {
+            throw e;
         }
         return edgeList;
     }
 
-    //The distance of the route A-B-C.
+    private List<String> extractEdgeFromLine(String line) {
+        List<String> edgeList = new ArrayList<>();
+        String[] strArray = line.split(",");
+        for (String str : strArray) {
+            String edgeStr = findEdgeString(str);
+            boolean isLegal = isLegalEdgeStr(edgeStr);
+            if (!isLegal) {
+                break;
+            }
+            edgeList.add(edgeStr);
+        }
+        return edgeList;
+    }
+
+    private String findEdgeString(String edgeStr) {
+        int index = 0;
+        edgeStr = edgeStr.trim();
+        if (StringUtils.isBlank(edgeStr)) {
+            return null;
+        }
+        int len = edgeStr.length();
+        //record blank string
+        while (index < len) {
+            char c = edgeStr.charAt(index);
+            if (c >= 'A' && c <= 'Z') {
+                break;
+            }
+            index++;
+        }
+        if (index >= len) {
+            return null;
+        }
+        return edgeStr.substring(index);
+    }
+
+    private boolean isLegalEdgeStr(String edgeStr) {
+        boolean isLegal = false;
+        if (StringUtils.isBlank(edgeStr)) {
+            return isLegal;
+        }
+        Pattern pattern = Pattern.compile(ROUTEPATTERN);
+        Matcher match = pattern.matcher(edgeStr);
+        if (match.matches()) {
+            isLegal = true;
+        }
+        return isLegal;
+    }
+
+    /**
+     *
+     * @return The distance of the route A-B-C.
+     */
     public double output1() {
         double distance = 0;
         if (this.route != null && this.route.getGraph() != null) {
@@ -113,12 +129,14 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             distance = action.getResult();
-
         }
         return distance;
     }
 
-    //The distance of the route A-D.
+    /**
+     *
+     * @return The distance of the route A-D
+     */
     public double output2() {
         double distance = 0;
         if (this.route != null && this.route.getGraph() != null) {
@@ -130,13 +148,15 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             distance = action.getResult();
-
         }
         return distance;
 
     }
 
-    //The distance of the route A-D-C.
+    /**
+     *
+     * @return The distance of the route A-D-C
+     */
     public double output3() {
         double distance = 0;
         if (this.route != null && this.route.getGraph() != null) {
@@ -149,12 +169,14 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             distance = action.getResult();
-
         }
         return distance;
     }
 
-    //The distance of the route  A-E-B-C-D.
+    /**
+     *
+     * @return The distance of the route A-E-B-C-D
+     */
     public double output4() {
         double distance = 0;
         if (this.route != null && this.route.getGraph() != null) {
@@ -169,12 +191,14 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             distance = action.getResult();
-
         }
         return distance;
     }
 
-    //The distance of the route A-E-D.
+    /**
+     *
+     * @return The distance of the route A-E-D
+     */
     public double output5() {
         double distance = 0;
         if (this.route != null && this.route.getGraph() != null) {
@@ -187,12 +211,15 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             distance = action.getResult();
-
         }
         return distance;
     }
 
-    //The number of trips starting at C and ending at C with a maximum of 3 stops.
+    /**
+     *
+     * @return The number of trips starting at C and ending at C with a maximum
+     * of 3 stops
+     */
     public int output6() {
         int num = 0;
         if (this.route != null && this.route.getGraph() != null) {
@@ -208,12 +235,15 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             num = action.getResult();
-
         }
         return num;
     }
 
-    //The number of trips starting at A and ending at C with exactly 4 stops.
+    /**
+     *
+     * @return The number of trips starting at A and ending at C with exactly 4
+     * stops
+     */
     public int output7() {
         int num = 0;
         if (this.route != null && this.route.getGraph() != null) {
@@ -229,12 +259,15 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             num = action.getResult();
-
         }
         return num;
     }
 
-    //The length of the shortest route (in terms of distance to travel) from A to C.
+    /**
+     *
+     * @return The length of the shortest route (in terms of distance to travel)
+     * from A to C
+     */
     public double output8() {
         double distance = 0;
         if (this.route != null) {
@@ -250,12 +283,15 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             distance = action.getResult();
-
         }
         return distance;
     }
 
-    //The length of the shortest route (in terms of distance to travel) from B to B.
+    /**
+     *
+     * @return The length of the shortest route (in terms of distance to travel)
+     * from B to B
+     */
     public double output9() {
         double distance = 0;
         if (this.route != null) {
@@ -271,12 +307,15 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             distance = action.getResult();
-
         }
         return distance;
     }
 
-    //The number of different routes from C to C with a distance of less than 30.
+    /**
+     *
+     * @return The number of different routes from C to C with a distance of
+     * less than 30
+     */
     public int output10() {
         int num = 0;
         if (this.route != null && this.route.getGraph() != null) {
@@ -292,7 +331,6 @@ public class Demo {
             GraphInvoker invoker = new GraphInvoker(action);
             invoker.runAction();
             num = action.getResult();
-
         }
         return num;
     }

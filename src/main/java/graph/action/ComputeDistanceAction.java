@@ -1,6 +1,6 @@
 package graph.action;
 
-import graph.model.IGraph;
+import graph.model.AbstractGraph;
 
 /**
  *
@@ -8,7 +8,7 @@ import graph.model.IGraph;
  */
 public class ComputeDistanceAction implements IGraphAction {
 
-    private IGraph graph;
+    private AbstractGraph graph;
 
     private int[] indexs;
 
@@ -22,7 +22,7 @@ public class ComputeDistanceAction implements IGraphAction {
         this.result = result;
     }
 
-    public ComputeDistanceAction(IGraph graph, int[] indexs) {
+    public ComputeDistanceAction(AbstractGraph graph, int[] indexs) {
         this.graph = graph;
         this.indexs = indexs;
     }

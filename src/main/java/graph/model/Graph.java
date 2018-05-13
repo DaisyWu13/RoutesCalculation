@@ -8,23 +8,10 @@ import org.apache.commons.collections.CollectionUtils;
  *
  * @author Daisy Wu
  */
-public class Graph<V> implements IGraph {
-
-    private static final int MAX = Integer.MAX_VALUE;
+public class Graph<V> extends AbstractGraph {
 
     private Vector<Edge<V>> edgeList;//store all the edges
     private Vector<V> vList;//store the key value of vertex
-    private double[][] edges;//store the distance between vertex
-    private int vNum;//the number of vertexes
-    private int edgeNum;//the number of edges
-
-    public int getEdgeNum() {
-        return edgeNum;
-    }
-
-    public void setEdgeNum(int edgeNum) {
-        this.edgeNum = edgeNum;
-    }
 
     public Vector<Edge<V>> getEdgeList() {
         return edgeList;
@@ -32,22 +19,6 @@ public class Graph<V> implements IGraph {
 
     public void setEdgeList(Vector<Edge<V>> edgeList) {
         this.edgeList = edgeList;
-    }
-
-    public double[][] getEdges() {
-        return edges;
-    }
-
-    public void setEdges(double[][] edges) {
-        this.edges = edges;
-    }
-
-    public int getvNum() {
-        return vNum;
-    }
-
-    public void setvNum(int vNum) {
-        this.vNum = vNum;
     }
 
     public Vector<V> getvList() {
@@ -59,8 +30,8 @@ public class Graph<V> implements IGraph {
     }
 
     public Graph(int size) {
-        this.edges = new double[size][size];
-        this.vNum = size;
+        this.setEdges(new double[size][size]);
+        this.setvNum(size);
     }
 
     public Graph() {
@@ -71,7 +42,7 @@ public class Graph<V> implements IGraph {
     public void initEdges() {
         Vector<Edge<V>> edgeList = this.edgeList;
         Vector<V> vList = this.vList;
-        double[][] edges = this.edges;
+        double[][] edges = this.getEdges();
         if (CollectionUtils.isEmpty(edgeList) || CollectionUtils.isEmpty(vList)) {
             return;
         }
@@ -133,7 +104,7 @@ public class Graph<V> implements IGraph {
 
     private static int findMinIndex(int n, int[] set, double[] d) {
         int minIndex = 0;
-        double min = MAX;
+        double min = MAX_DISTANCE;
         for (int k = 0; k < n; k++) {
             if (set[k] == 0 && d[k] < min) {
                 min = d[k];
@@ -150,7 +121,7 @@ public class Graph<V> implements IGraph {
         boolean notExist = false;
         for (int i = 0; i < indexs.length - 1; i++) {
             if (indexs[i] != -1 && indexs[i + 1] != -1) {
-                if (edges[indexs[i]][indexs[i + 1]] != MAX) {
+                if (edges[indexs[i]][indexs[i + 1]] != MAX_DISTANCE) {
                     distance += edges[indexs[i]][indexs[i + 1]];
                 } else {
                     notExist = true;
@@ -179,14 +150,14 @@ public class Graph<V> implements IGraph {
         for (int i = 1; i <= level; i++) {
             if (total) {
                 for (int row : queue) {
-                    if (edges[row][destIndex] != MAX) {
+                    if (edges[row][destIndex] != MAX_DISTANCE) {
                         num++;
                     }
                 }
             }
             if (!total && i == level) {
                 for (int row : queue) {
-                    if (edges[row][destIndex] != MAX) {
+                    if (edges[row][destIndex] != MAX_DISTANCE) {
                         num++;
                     }
                 }
@@ -195,7 +166,7 @@ public class Graph<V> implements IGraph {
                 LinkedList<Integer> queueLevel = new LinkedList<Integer>();
                 for (int row : queue) {
                     for (int column = 0; column < N; column++) {
-                        if (edges[row][column] != MAX) {
+                        if (edges[row][column] != MAX_DISTANCE) {
                             queueLevel.addFirst(column);
                         }
                     }
@@ -221,7 +192,7 @@ public class Graph<V> implements IGraph {
         int N = this.getvNum();
         double[][] edges = this.getEdges();
         LinkedList<Node> queue = null;
-        if (distance > MAX || srcIndex == -1 || destIndex == -1) {
+        if (distance > MAX_DISTANCE || srcIndex == -1 || destIndex == -1) {
             return -1;
         }
 

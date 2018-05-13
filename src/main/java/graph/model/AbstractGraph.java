@@ -4,12 +4,41 @@ package graph.model;
  *
  * @author Daisy Wu
  */
-public interface IGraph {
+public abstract class AbstractGraph {
+
+    public static final int MAX_DISTANCE = Integer.MAX_VALUE;
+    private double[][] edges;//store the distance between vertex
+    private int vNum;//the number of vertexes
+    private int edgeNum;//the number of edges
+
+    public double[][] getEdges() {
+        return edges;
+    }
+
+    public void setEdges(double[][] edges) {
+        this.edges = edges;
+    }
+
+    public int getvNum() {
+        return vNum;
+    }
+
+    public void setvNum(int vNum) {
+        this.vNum = vNum;
+    }
+
+    public int getEdgeNum() {
+        return edgeNum;
+    }
+
+    public void setEdgeNum(int edgeNum) {
+        this.edgeNum = edgeNum;
+    }
 
     /**
      * set the edges[][] according to the edge list and vertex list
      */
-    void initEdges();
+    public abstract void initEdges();
 
     /**
      * compute the shortest distance between two vertexes, according to Dijkstra
@@ -18,7 +47,7 @@ public interface IGraph {
      * @param destIndex
      * @return
      */
-    double dijkstra(int srcIndex, int destIndex);
+    public abstract double dijkstra(int srcIndex, int destIndex);
 
     /**
      * compute the distance between the given route
@@ -26,7 +55,7 @@ public interface IGraph {
      * @param indexs
      * @return
      */
-    double computeDistance(int[] indexs);
+    public abstract double computeDistance(int[] indexs);
 
     /**
      * compute the routes from srcVertex to destVertex regard the routes from
@@ -41,7 +70,7 @@ public interface IGraph {
      * @param total
      * @return
      */
-    int routesNum(int srcIndex, int destIndex, int level, boolean total);
+    public abstract int routesNum(int srcIndex, int destIndex, int level, boolean total);
 
     /**
      *
@@ -50,5 +79,5 @@ public interface IGraph {
      * @param distance
      * @return
      */
-    int routesNumLimitedByDistance(int srcIndex, int destIndex, double distance);
+    public abstract int routesNumLimitedByDistance(int srcIndex, int destIndex, double distance);
 }

@@ -1,6 +1,6 @@
 package graph.action;
 
-import graph.model.IGraph;
+import graph.model.AbstractGraph;
 
 /**
  *
@@ -8,7 +8,7 @@ import graph.model.IGraph;
  */
 public class RoutesNumAction implements IGraphAction {
 
-    private IGraph graph;
+    private AbstractGraph graph;
     private int srcIndex;
     private int destIndex;
     private int level;
@@ -23,7 +23,7 @@ public class RoutesNumAction implements IGraphAction {
         this.result = result;
     }
 
-    public RoutesNumAction(IGraph graph, int srcIndex, int destIndex, int level, boolean total) {
+    public RoutesNumAction(AbstractGraph graph, int srcIndex, int destIndex, int level, boolean total) {
         this.graph = graph;
         this.srcIndex = srcIndex;
         this.destIndex = destIndex;

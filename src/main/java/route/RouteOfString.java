@@ -1,21 +1,10 @@
 package route;
 
-import graph.model.Graph;
-import graph.model.Vertex;
-import graph.model.Edge;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.LinkedList;
+import graph.model.*;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.Vector;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -23,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class RouteOfString {
 
+    public static final int MAX_DISTANCE = Integer.MAX_VALUE;
     private Graph<String> graph;
 
     public Graph<String> getGraph() {
@@ -32,8 +22,6 @@ public class RouteOfString {
     public void setGraph(Graph<String> graph) {
         this.graph = graph;
     }
-
-    private static final int MAX = Integer.MAX_VALUE;
 
     public RouteOfString(List<String> list) {
         this.graph = CreateGraph(list);
@@ -47,31 +35,23 @@ public class RouteOfString {
      * @return
      */
     private Vector<Edge<String>> readEdge(List<String> list) {
-        Vector<Edge<String>> edgeList = null;
-        if (CollectionUtils.isNotEmpty(list)) {
-            edgeList = new Vector<Edge<String>>();
-            for (String subStr : list) {
-                subStr = subStr.trim();
-                if (StringUtils.isBlank(subStr)) {
-                    continue;
-                }
-                Edge<String> edge = new Edge<String>();
-                int len = subStr.length();
-                int index = 0;
-                if (len < 3) {
-                    continue;
-                }
-
-                Vertex<String> vertStart = new Vertex<String>(subStr.substring(index, ++index));
-                Vertex<String> vertEnd = new Vertex<String>(subStr.substring(index, ++index));
-                edge.setVertStart(vertStart);
-                edge.setVertEnd(vertEnd);
-                edge.setDistance(Integer.valueOf(subStr.substring(index, len)));
-                edgeList.addElement(edge);
-
-            }
-
+        Vector<Edge<String>> edgeList = new Vector<>();
+        if (CollectionUtils.isEmpty(list)) {
+            return edgeList;
         }
+        for (String edgeStr : list) {
+            Edge<String> edge = new Edge<String>();
+            int len = edgeStr.length();
+            int index = 0;
+
+            Vertex<String> vertStart = new Vertex<>(edgeStr.substring(index, ++index));
+            Vertex<String> vertEnd = new Vertex<>(edgeStr.substring(index, ++index));
+            edge.setVertStart(vertStart);
+            edge.setVertEnd(vertEnd);
+            edge.setDistance(Integer.valueOf(edgeStr.substring(index, len)));
+            edgeList.addElement(edge);
+        }
+
         return edgeList;
     }
 
@@ -83,7 +63,7 @@ public class RouteOfString {
      * @return
      */
     private Vector<String> getVertexTreeset(Vector<Edge<String>> list) {
-        TreeSet<Vertex<String>> set = new TreeSet<Vertex<String>>();
+        TreeSet<Vertex<String>> set = new TreeSet<>();
 
         for (Edge<String> e : list) {
             Vertex<String> vertStart = e.getVertStart();
@@ -92,7 +72,7 @@ public class RouteOfString {
             set.add((Vertex<String>) vertEnd);
         }
         //set the index in sequence for vertex
-        Vector<String> vList = new Vector<String>();
+        Vector<String> vList = new Vector<>();
         int i = 0;
         for (Vertex<String> v : set) {
             v.setIndex(i);
@@ -109,8 +89,8 @@ public class RouteOfString {
      *
      * @param list
      */
-    public Graph CreateGraph(List<String> list) {
-        Graph graph = new Graph<String>();
+    public Graph<String> CreateGraph(List<String> list) {
+        Graph<String> graph = new Graph<>();
         graph.setEdgeList(readEdge(list));
         graph.setvList(getVertexTreeset(graph.getEdgeList()));
         int vNum = graph.getvList().size();
@@ -119,7 +99,7 @@ public class RouteOfString {
         double[][] edges = new double[vNum][vNum];
         for (int i = 0; i < vNum; i++) {
             for (int j = 0; j < vNum; j++) {
-                edges[i][j] = MAX;
+                edges[i][j] = MAX_DISTANCE;
             }
         }
         graph.setEdges(edges);
